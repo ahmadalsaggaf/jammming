@@ -1,3 +1,4 @@
+/* eslint-disable react/no-access-state-in-setstate */
 /* eslint-disable react/destructuring-assignment */
 import React from 'react';
 import './App.css';
@@ -46,6 +47,16 @@ class App extends React.Component {
         },
       ],
     };
+    this.addTracks = this.addTracks.bind(this);
+  }
+
+  addTracks(track) {
+    const tracks = this.state.playlistTracks;
+    if (tracks.find((savedTrack) => savedTrack.id === track.id)) {
+      return;
+    }
+    tracks.push(track);
+    this.setState({ playlistTracks: tracks });
   }
 
   render() {
@@ -57,7 +68,10 @@ class App extends React.Component {
         <div className="App">
           <SearchBar />
           <div className="App-playlist">
-            <SearchResults searchResults={this.state.searchResults} />
+            <SearchResults
+              searchResults={this.state.searchResults}
+              onAdd={this.addTracks}
+            />
             <Playlist
               playlistName={this.state.playlistName}
               playlistTracks={this.state.playlistTracks}
