@@ -77,6 +77,12 @@ class App extends React.Component {
   savePlaylist() {
     // eslint-disable-next-line no-unused-vars
     const trackURIs = this.state.playlistTracks.map((track) => track.uri);
+    Spotify.savePlaylist(this.state.playlistName, trackURIs).then(() => {
+      this.setState({
+        playlistName: 'New PLaylist',
+        playlistTracks: [],
+      });
+    });
   }
 
   // eslint-disable-next-line class-methods-use-this
