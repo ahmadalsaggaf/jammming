@@ -1,6 +1,9 @@
-let accessToken;
+/* eslint-disable no-shadow */
+/* eslint-disable prefer-destructuring */
+
 const clientID = 'f6879824e4524c048ac7c7f7d44c60cb';
-const redirectURI = 'http://localhost:3000/';
+const redirectURI = 'http://localhost:3000/callback/';
+let accessToken;
 
 const Spotify = {
   getAccessToken() {
@@ -26,7 +29,7 @@ const Spotify = {
 
   search(searchterm) {
     const accessToken = Spotify.getAccessToken();
-    fetch(
+    return fetch(
       `https://api.spotify.com/v1/search?type=track&q=${searchterm}
     `,
       {
@@ -41,7 +44,7 @@ const Spotify = {
         return responseJson.tracks.items.map((track) => ({
           id: track.id,
           name: track.name,
-          artist: track.artist[0].name,
+          artist: track.artists[0].name,
           album: track.album.name,
           uri: track.uri,
         }));
@@ -49,12 +52,12 @@ const Spotify = {
   },
 
   savePlaylist(name, trackURI) {
-    if (!nameOfPlaylist || !trackURI.length) {
+    if (!name || !trackURI.length) {
       return;
     }
 
     const accessToken = Spotify.getAccessToken();
-    const headers = { headers: { Authorization: `Bearer ${accessToken}` } };
+    const headers = { Authorization: `Bearer ${accessToken}` };
     let userid;
 
     return fetch(
